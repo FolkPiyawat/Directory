@@ -15,9 +15,8 @@ export default class Facebook extends Component {
     email: "",
     picture: ""
   };
-  responseFacebook = response => {
-    // console.log(response);
 
+  responseFacebook = response => {
     this.setState({
       isLoggedIn: true,
       userID: response.userID,
@@ -25,7 +24,29 @@ export default class Facebook extends Component {
       email: response.email,
       picture: response.picture.data.url
     });
+    
+  localStorage.setItem('isLoggedIn', true);
+  localStorage.setItem('userID', response.userID);
+  localStorage.setItem('name', response.name);
+  localStorage.setItem('email', response.email);
+  localStorage.setItem('picture', response.picture.data.url);
+
   };
+
+  getLocalStorageLogin = () => {
+    if (localStorage.getItem('isLoggedIn') === 'true') {
+      this.setState({
+        isLoggedIn: true,
+        userID: localStorage.getItem('userID'),
+        name: localStorage.getItem('name'),
+        email: localStorage.getItem('email'),
+        picture: localStorage.getItem('picture')
+      });
+    }
+    
+    window.localStorage.setItem('liame',localStorage.getItem('email'))
+
+  }
 
   componentClicked = () => console.log("clicked");
 
@@ -37,6 +58,13 @@ export default class Facebook extends Component {
       email: '',
       picture: ''
     });
+
+    localStorage.setItem('isLoggedIn', false);
+    localStorage.setItem('userID', '');
+    localStorage.setItem('name', '');
+    localStorage.setItem('email', '');
+    localStorage.setItem('picture', '');
+
   }
 
   render() {

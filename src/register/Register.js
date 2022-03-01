@@ -8,7 +8,8 @@ export default class Register extends Component{
         this.state = {
             idkey:"",
             firstname:"",
-            lastname:""
+            lastname:"",
+            email:window.localStorage.getItem('email')
         }
         this.handleChang = this.handleChang.bind(this);
         this.handleClicked = this.handleClicked.bind(this);
@@ -19,17 +20,20 @@ export default class Register extends Component{
         });
     }
     handleClicked(){
+        alert(window.localStorage.getItem('email'));
         let url = `https://localhost:3000/data`;
         let data = {
             idkey:this.state.idkey,
             firstname:this.state.firstname,
-            lastname:this.state.lastname
+            lastname:this.state.lastname,
+            email:window.localStorage.getItem('email')
         }
         axios.post(url,data)
         this.setState({
             idkey:"",
             firstname:"",
-            lastname:""
+            lastname:"",
+            email:""
         });
     }
 
@@ -52,6 +56,10 @@ export default class Register extends Component{
                     <div className="form-group">
                         <label className="text-white"  htmlFor="id">Id</label>
                         <input type="text" className="form-control" size="10" id="idkey" onChange={this.handleChang} value={this.state.idkey}/>
+                    </div>
+                    <div className="form-group">
+                        <label className="text-white"  htmlFor="id">email</label>
+                        <input type="text" className="form-control" id="email" onChange={this.handleChang} value={this.state.email}/>
                     </div>
                     <button type="button" className="btn btn-primary" onClick={this.handleClicked}>Submit</button>
                 </form>
