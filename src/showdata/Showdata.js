@@ -14,7 +14,9 @@ export default class Showdata extends Component{
             firstname:"",
             lastname:"",
             timestamp:"",
-            email:""
+            email:"",
+            zodiac:"",
+            zo_listV2:[]
         }
         this.handleChang = this.handleChang.bind(this);
         this.handleClicked = this.handleClicked.bind(this);
@@ -31,8 +33,13 @@ export default class Showdata extends Component{
             .then(res => res.json())
             .then(list => this.setState({ list }))
         console.log("after fetch data");
+        console.log("before fetch data");
+        fetch('/data2')
+            .then(res => res.json())
+            .then(list => this.setState({ zo_listV2:list }))
+        console.log("after fetch data");
     }
-
+    
     onDelete=(user)=>{
         let url = `https://localhost:3000/delete`;
         let data = {
@@ -60,23 +67,16 @@ export default class Showdata extends Component{
             firstname:user.firstname,
             lastname:user.lastname,
             timestamp:user.timestamp,
-            email:user.email
+            email:user.email,
+            zodiac:user.zodiac_id
         })
     }
     handleChang = (e) => {
         this.setState({
             [e.target.id]: e.target.value
         });
-        let url = `https://localhost:3000/data`;
-        let data = {
-            idkey:this.state.idkey,
-            firstname:this.state.firstname,
-            lastname:this.state.lastname,
-            timestamp:this.state.timestamp,
-            email:this.state.email
+        
         }
-        axios.put(url,data)
-    }
 
     handleClicked(){
         let url = `https://localhost:3000/data`;
@@ -85,7 +85,8 @@ export default class Showdata extends Component{
             firstname:this.state.firstname,
             lastname:this.state.lastname,
             timestamp:this.state.timestamp,
-            email:this.state.email
+            email:this.state.email,
+            zodiac_id:this.state.zodiac
         }
         axios.put(url,data)
         this.setState({
@@ -93,7 +94,8 @@ export default class Showdata extends Component{
             firstname:"",
             lastname:"",
             timestamp:"",
-            email:localStorage.getItem('email')
+            email:localStorage.getItem('email'),
+            zodiac:""
         });
 	this.closeModal();
         setTimeout(()=>{this.componentDidMount()},1)
@@ -114,6 +116,7 @@ export default class Showdata extends Component{
                             <th>Last Name</th>
                             <th>Time</th>
                             <th>Email</th>
+                            <th>Zodiac</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -125,6 +128,7 @@ export default class Showdata extends Component{
                                             <td>{user.lastname}</td>
                                             <td>{user.timestamp}</td>
                                             <td>{user.email}</td>
+                                            <td>{user.zodiac_name}</td>
                                             <td><button type="button" class="btn btn-warning" onClick={()=>this.call(user)}>Edit</button></td>
                                             <td><button type="button" class="btn btn-danger"  onClick={()=>this.onDelete(user)}>Delet</button></td>
                                             <div className="box">
@@ -146,6 +150,14 @@ export default class Showdata extends Component{
                                                             <label>lasttname:</label>
                                                             <input type="text" className="form-control" id="lastname" onChange={this.handleChang} value={this.state.lastname}/>
                                                         </div>
+                                                        <div>
+                                                        <select className="form-group" id="zodiac" value={this.state.zodiac} onChange={this.handleChang} required>
+                                                            <option value=""> ------- </option>
+                                                            {this.state.zo_listV2.map(item => {
+                                                                return <option value={item.id}>{item.zodiac_name}</option>
+                                                            })}
+                                                        </select>
+                                                    </div>
                                                         <button type="button" className="btn btn-primary" onClick={this.handleClicked}>Submit</button>
                                                     </form>
                                                 </Modal>

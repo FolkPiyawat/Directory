@@ -26,7 +26,18 @@ const db = mysql.createConnection({
 // show data
 app.get('/data', function(req,res){
     console.log("Hello in /data ");
-    let sql = 'SELECT * FROM users;';
+    let sql = 'SELECT u.*,z.zodiac_name FROM users u, zodiac z WHERE u.zodiac_id = z.id; ';
+    db.query(sql, (err, result)=>{
+        if(err) throw err;
+        console.log(result);
+        res.json(result);
+    });
+    console.log("after query");
+});
+
+app.get('/data2', function(req,res){
+    console.log("Hello in /data2 ");
+    let sql = 'SELECT * FROM zodiac; ';
     db.query(sql, (err, result)=>{
         if(err) throw err;
         console.log(result);
@@ -60,7 +71,8 @@ app.post('/data', function(req, res){
         id:req.body.idkey,
         firstname:req.body.firstname,
         lastname:req.body.lastname,
-        email:req.body.email
+        email:req.body.email,
+        zodiac_id:req.body.zodiac
     };
     let sql = 'INSERT INTO users SET ?';
     db.query(sql, data, (err, result)=>{
